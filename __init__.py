@@ -16,8 +16,8 @@ def est_authentifie():
 def hello_world():
     return render_template('hello.html')
 
-@app.route('/schemasql2')
-def schemasql2():
+@app.route('/schemasql')
+def schemasql():
     return render_template('schema.sql2')
 
 @app.route('/lecture')
