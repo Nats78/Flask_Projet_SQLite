@@ -1,0 +1,77 @@
+import sqlite3
+from datetime import date, timedelta
+
+def init_db():
+    connection = sqlite3.connect('bibliotheque.db')
+    cursor = connection.cursor()
+    
+    with open('schema2.sql') as f:
+        cursor.executescript(f.read())
+    
+    cursor.execute("INSERT INTO Livres (ID_livre, Titre, Auteur, Annee_publication, Quantite) VALUES (?, ?, ?, ?, ?)", (1, 'Emilie', 'Victor', 2024, 10))
+    cursor.execute("INSERT INTO Livres (ID_livre, Titre, Auteur, Annee_publication, Quantite) VALUES (?, ?, ?, ?, ?)", (2, 'Didier', 'Laurent', 2023, 5))
+    
+    connection.commit()
+    connection.close()
+
+def ajouter_livre(titre, auteur, annee, quantite):
+    connection = sqlite3.connect('bibliotheque.db')
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO Livres (Titre, Auteur, Annee_publication, Quantite) VALUES (?, ?, ?, ?)", (titre, auteur, annee, quantite))
+    connection.commit()
+    connection.close()
+
+def supprimer_livre(id_livre):
+    connection = sqlite3.connect('bibliotheque.db')
+    cursor = connection.cursor()
+    cursor.execute("DELETE FROM Livres WHERE ID_livre = ?", (id_livre,))
+    connection.commit()
+    connection.close()
+
+def rechercher_livres():
+    connection = sqlite3.connect('bibliotheque.db')
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM Livres WHERE Quantite > 0")
+    livres = cursor.fetchall()
+    connection.close()
+    return livres
+
+def ajouter_utilisateur(nom, prenom, email):
+    connection = sqlite3.connect('bibliotheque.db')
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO Utilisateurs (Nom, Prenom, Email) VALUES (?, ?, ?)", (nom, prenom, email))
+    connection.commit()
+    connection.close()
+
+def emprunter_livre(id_utilisateur, id_livre):
+    connection = sqlite3.connect('bibliotheque.db')
+    cursor = connection.cursor()
+    
+    cursor.execute("SELECT Quantite FROM Livres WHERE ID_livre = ?", (id_livre,))
+    livre = cursor.fetchone()
+    if livre and livre[0] > 0:
+        date_emprunt = date.today()
+        date_retour_prevue = date_emprunt + timedelta(days=14)
+        cursor.execute("INSERT INTO Emprunts (ID_utilisateur, ID_livre, Date_emprunt, Date_retour_prevue) VALUES (?, ?, ?, ?)",
+                       (id_utilisateur, id_livre, date_emprunt, date_retour_prevue))
+        cursor.execute("UPDATE Livres SET Quantite = Quantite - 1 WHERE ID_livre = ?", (id_livre,))
+        connection.commit()
+    connection.close()
+
+def retourner_livre(id_emprunt):
+    connection = sqlite3.connect('bibliotheque.db')
+    cursor = connection.cursor()
+    
+    cursor.execute("SELECT ID_livre FROM Emprunts WHERE ID_emprunt = ?", (id_emprunt,))
+    livre = cursor.fetchone()
+    if livre:
+        cursor.execute("UPDATE Emprunts SET Date_retour_effective = ? WHERE ID_emprunt = ?", (date.today(), id_emprunt))
+        cursor.execute("UPDATE Livres SET Quantite = Quantite + 1 WHERE ID_livre = ?", (livre[0],))
+        connection.commit()
+    connection.close()
+
+if __name__ == "__main__":
+    init_db()
+    ajouter_utilisateur("Dupont", "Jean", "jean.dupont@example.com")
+    emprunter_livre(1, 1)
+    print("Livres disponibles:", rechercher_livres())
