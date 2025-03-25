@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des livres disponibles</title>
+</head>
+<body>
+    <h2>Liste des livres disponibles</h2>
+
+    <!-- Bouton Ajouter un livre visible pour tous -->
+    <a href="/ajouter_livre">
+        <button>Ajouter un livre</button>
+    </a>
+
+    
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Auteur</th>
+                    <th>Année de publication</th>
+                    <th>Quantité disponible</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                    <tr>
+                        <td>Emilie</td>  <!-- Titre du livre -->
+                        <td>Victor</td>  <!-- Auteur -->
+                        <td>2024</td>  <!-- Année de publication -->
+                        <td>10</td>  <!-- Quantité disponible -->
+                        <td>
+                            <!-- Formulaire pour emprunter le livre -->
+                            <form action="/emprunter_livre/1" method="POST" style="display:inline;">
+                                <button type="submit" >
+                                    Emprunter
+                                </button>
+                            </form>
+
+                            <!-- Formulaire pour supprimer le livre -->
+                            <form action="/supprimer_livre/1" method="POST" style="display:inline;">
+                                <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?');">
+                                    Supprimer
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>Didier</td>  <!-- Titre du livre -->
+                        <td>Laurent</td>  <!-- Auteur -->
+                        <td>2023</td>  <!-- Année de publication -->
+                        <td>5</td>  <!-- Quantité disponible -->
+                        <td>
+                            <!-- Formulaire pour emprunter le livre -->
+                            <form action="/emprunter_livre/2" method="POST" style="display:inline;">
+                                <button type="submit" >
+                                    Emprunter
+                                </button>
+                            </form>
+
+                            <!-- Formulaire pour supprimer le livre -->
+                            <form action="/supprimer_livre/2" method="POST" style="display:inline;">
+                                <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?');">
+                                    Supprimer
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                
+            </tbody>
+        </table>
+    
+</body>
+</html>
