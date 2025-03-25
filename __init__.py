@@ -16,6 +16,10 @@ def est_authentifie():
 def hello_world():
     return render_template('hello.html')
 
+@app.route('/schemasql2')
+def schemasql2():
+    return render_template('schema.sql2')
+
 @app.route('/lecture')
 def lecture():
     if not est_authentifie():
